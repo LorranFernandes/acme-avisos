@@ -1,0 +1,37 @@
+{
+    "name": "avisos/backend",
+    "autoload": {
+        "psr-4": {
+            "Acme\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lorran Fernandes",
+            "email": "lorranfernandes20@gmail.com"
+        }
+    ],
+    "type": "project",
+    "require": {
+        "php": "^8.0",
+        "phputil/router": "^0.3.6"
+    },
+    "require-dev": {
+        "kahlan/kahlan": "^6.0",
+        "phpstan/phpstan": "^2.1"
+    },
+    "scripts": {
+        "kahlan": "vendor/bin/kahlan --reporter=verbose",
+        "stan": "vendor/bin/phpstan analyse --memory-limit=256M src --level=6",
+        "stan:spec": "vendor/bin/phpstan analyse --memory-limit=256M spec --level=0",
+        "test": [
+            "@kahlan",
+            "@stan"
+        ],
+        "test:all": [
+            "@kahlan",
+            "@stan",
+            "@stan:spec"
+        ]
+    }
+}
