@@ -128,7 +128,7 @@ export class VisaoAvisoEmDOM implements VisaoAviso {
         app.innerHTML = `
             <nav class="navbar navbar-dark bg-primary mb-4">
               <div class="container">
-                <span class="navbar-brand mb-0 h1">Gestão de Avisos</span>
+                <span class="navbar-brand mb-0 h1">Avisos</span>
                 <div class="d-flex align-items-center gap-3">
                     <span class="text-white small">Olá, ${usuario ? usuario.nome : 'Usuário'}</span>
                     <button id="btn-logout" class="btn btn-light btn-sm">Sair</button>
@@ -288,7 +288,7 @@ export class VisaoAvisoEmDOM implements VisaoAviso {
                 setor_id: parseInt(setorId), 
                 validade, 
                 publico_alvo: publico,
-                periodos: JSON.stringify(periodos), 
+                periodos: periodos, 
                 urgente: urgente
             };
 
@@ -299,7 +299,7 @@ export class VisaoAvisoEmDOM implements VisaoAviso {
                 modal?.hide();
                 window.location.reload(); 
             } else {
-                alert("Erro ao criar aviso.");
+                alert("Erro ao criar aviso. Verifique se a data de validade é futura");
             }
         });
     }

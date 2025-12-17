@@ -2,31 +2,38 @@
 
 namespace Aviso;
 
-class Aviso implements \JsonSerializable {
+use DateTime;
+use JsonSerializable;
+
+class Aviso implements JsonSerializable {
     private ?int $id;
     private string $titulo;
     private string $texto;
     private bool $urgente;
-    private \DateTime $validade;
+    private DateTime $validade;
     private string $publicoAlvo;
     private int $setorId;
     private int $usuarioId;
-    private array $periodos; 
-    
-    private ?string $nomeSetor = null;
-    private ?string $corSetor = null;
-    private ?string $nomeAutor = null;
+    private array $periodos;
+    private string $nomeSetor; 
+    private string $corSetor;
+    private string $nomeAutor;
+    private ?DateTime $dataCriacao;
 
     public function __construct(
-        ?int $id,
-        string $titulo,
-        string $texto,
-        bool $urgente,
-        \DateTime $validade,
-        string $publicoAlvo,
-        int $setorId,
-        int $usuarioId,
-        array $periodos = []
+        ?int $id, 
+        string $titulo, 
+        string $texto, 
+        bool $urgente, 
+        DateTime $validade, 
+        string $publicoAlvo, 
+        int $setorId, 
+        int $usuarioId, 
+        array $periodos = [],
+        string $nomeSetor = '',
+        string $corSetor = '',      
+        string $nomeAutor = '',     
+        ?DateTime $dataCriacao = null 
     ) {
         $this->id = $id;
         $this->titulo = $titulo;
@@ -37,30 +44,24 @@ class Aviso implements \JsonSerializable {
         $this->setorId = $setorId;
         $this->usuarioId = $usuarioId;
         $this->periodos = $periodos;
+        $this->nomeSetor = $nomeSetor;
+        $this->corSetor = $corSetor;
+        $this->nomeAutor = $nomeAutor;
+        $this->dataCriacao = $dataCriacao ?? new DateTime();
     }
 
-    public function getId(): ?int { return $this->id; }
     public function setId(int $id): void { $this->id = $id; }
+    public function getId(): ?int { return $this->id; }
     public function getTitulo(): string { return $this->titulo; }
     public function getTexto(): string { return $this->texto; }
     public function isUrgente(): bool { return $this->urgente; }
-    public function getValidade(): \DateTime { return $this->validade; }
+    public function getValidade(): DateTime { return $this->validade; }
     public function getPublicoAlvo(): string { return $this->publicoAlvo; }
     public function getSetorId(): int { return $this->setorId; }
     public function getUsuarioId(): int { return $this->usuarioId; }
     public function getPeriodos(): array { return $this->periodos; }
-    
-    public function getNomeSetor(): ?string { return $this->nomeSetor; }
-    public function getCorSetor(): ?string { return $this->corSetor; }
-    public function getNomeAutor(): ?string { return $this->nomeAutor; }
 
-    public function setDadosExibicao(string $setor, string $cor, string $autor): void {
-        $this->nomeSetor = $setor;
-        $this->corSetor = $cor;
-        $this->nomeAutor = $autor;
-    }
-
-    public function toArray(): array {
+    public function jsonSerialize(): array {
         return [
             'id' => $this->id,
             'titulo' => $this->titulo,
@@ -71,14 +72,14 @@ class Aviso implements \JsonSerializable {
             'setor_id' => $this->setorId,
             'usuario_id' => $this->usuarioId,
             'periodos' => $this->periodos,
-
-            'setor_nome' => $this->nomeSetor,
-            'setor_cor' => $this->corSetor,
-            'autor_nome' => $this->nomeAutor
+            'setor_nome' => $this->nomeSetor, 
+            'cor_hex' => $this->corSetor,
+            'nome_autor' => $this->nomeAutor,
+            'data_criacao' => $this->dataCriacao ? $this->dataCriacao->format('Y-m-d H:i:s') : null
         ];
     }
 
-    public function jsonSerialize(): mixed {
-        return $this->toArray();
+    public function toArray(): array {
+        return $this->jsonSerialize();
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Aviso;
 
+use DateTime;
+use Exception;
+
 class ServicoAviso {
     private RepositorioAviso $repositorio;
 
@@ -10,23 +13,24 @@ class ServicoAviso {
     }
 
     public function criarAviso(array $dados): array {
+
         if (empty($dados['titulo']) || empty($dados['texto'])) {
-            throw new \Exception("Título e texto são obrigatórios.");
+            throw new Exception("Título e texto são obrigatórios.");
         }
 
         if (empty($dados['periodos']) || !is_array($dados['periodos'])) {
-            throw new \Exception("Selecione pelo menos um período de exibição.");
+            throw new Exception("Selecione pelo menos um período de exibição.");
         }
 
-        if (empty($dados['setorId'])) {
-             throw new \Exception("O setor é obrigatório.");
+        if (empty($dados['setor_id'])) {
+             throw new Exception("O setor é obrigatório.");
         }
 
-        $validade = new \DateTime($dados['validade']);
-        $agora = new \DateTime();
+        $validade = new DateTime($dados['validade']);
+        $agora = new DateTime();
         
         if ($validade <= $agora) {
-            throw new \Exception("A data de validade deve ser futura.");
+            throw new Exception("A data de validade deve ser futura.");
         }
 
         $aviso = new Aviso(
@@ -35,10 +39,14 @@ class ServicoAviso {
             $dados['texto'],
             isset($dados['urgente']) ? (bool) $dados['urgente'] : false,
             $validade,
-            $dados['publicoAlvo'] ?? 'Todos',
-            (int) $dados['setorId'], 
-            (int) $dados['autor_id'], 
-            $dados['periodos'] 
+            $dados['publico_alvo'] ?? 'Todos', 
+            (int) $dados['setor_id'],         
+            (int) ($dados['autor_id'] ?? 1),  
+            $dados['periodos'],
+            '',
+            '', 
+            '', 
+            null
         );
 
         $avisoSalvo = $this->repositorio->adicionar($aviso);

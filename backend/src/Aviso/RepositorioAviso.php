@@ -8,7 +8,7 @@ interface RepositorioAviso {
      * @return Aviso[] 
      * */
     public function listar(bool $apenasValidos = false): array;
-        /** 
+    /** 
      * @return Setores[] 
      * */
     public function listarSetores(): array;

@@ -3,6 +3,8 @@
 namespace Aviso;
 
 use PDO;
+use Exception;
+use DateTime;
 
 class RepositorioAvisoEmBDR implements RepositorioAviso {
     private PDO $pdo;
@@ -12,11 +14,11 @@ class RepositorioAvisoEmBDR implements RepositorioAviso {
     }
 
     public function adicionar(Aviso $aviso): Aviso {
-        $this->pdo->beginTransaction();
-
         try {
-            $sql = "INSERT INTO avisos (titulo, texto, urgente, validade, publico_alvo, setor_id, usuario_id) 
-                    VALUES (:titulo, :texto, :urgente, :validade, :publico, :setor, :usuario)";
+            $this->pdo->beginTransaction();
+            
+            $sql = "INSERT INTO avisos (titulo, texto, urgente, validade, publico_alvo, setor_id, usuario_id, data_criacao) 
+                    VALUES (:titulo, :texto, :urgente, :validade, :publico, :setor, :usuario, NOW())";
             
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute([
@@ -26,29 +28,34 @@ class RepositorioAvisoEmBDR implements RepositorioAviso {
                 ':validade' => $aviso->getValidade()->format('Y-m-d H:i:s'),
                 ':publico' => $aviso->getPublicoAlvo(),
                 ':setor' => $aviso->getSetorId(),
-                ':usuario' => $aviso->getUsuarioId()
+                ':usuario' => $aviso->getUsuarioId() 
             ]);
 
             $idAviso = (int) $this->pdo->lastInsertId();
             $aviso->setId($idAviso);
 
-            $stmtPeriodo = $this->pdo->prepare("SELECT id FROM periodos WHERE nome = ?");
-            $stmtInsertRel = $this->pdo->prepare("INSERT INTO aviso_periodos (aviso_id, periodo_id) VALUES (?, ?)");
+            $mapaPeriodos = ['manha' => 1, 'tarde' => 2, 'noite' => 3];
+            
+            $sqlPeriodo = "INSERT INTO aviso_periodos (aviso_id, periodo_id) VALUES (:aviso_id, :periodo_id)";
+            $stmtPeriodo = $this->pdo->prepare($sqlPeriodo);
 
             foreach ($aviso->getPeriodos() as $nomePeriodo) {
-                $stmtPeriodo->execute([$nomePeriodo]);
-                $idPeriodo = $stmtPeriodo->fetchColumn();
+                $chave = strtolower(trim($nomePeriodo));
                 
-                if ($idPeriodo) {
-                    $stmtInsertRel->execute([$idAviso, $idPeriodo]);
+                if (isset($mapaPeriodos[$chave])) {
+                    $stmtPeriodo->execute([
+                        ':aviso_id' => $idAviso,
+                        ':periodo_id' => $mapaPeriodos[$chave]
+                    ]);
                 }
             }
 
             $this->pdo->commit();
             return $aviso;
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->pdo->rollBack();
+            error_log("Erro no Repositorio::adicionar: " . $e->getMessage());
             throw $e;
         }
     }
@@ -67,7 +74,7 @@ class RepositorioAvisoEmBDR implements RepositorioAviso {
             // A hora atual do servidor deve estar dentro do período (Manhã/Tarde/Noite)
             $sql .= " WHERE a.validade >= NOW() 
                       AND CURTIME() BETWEEN p.hora_inicio AND p.hora_fim";
-        
+            
             $sql .= " ORDER BY a.urgente DESC, a.data_criacao DESC";
         } else {
             $sql .= " ORDER BY a.data_criacao DESC";
@@ -89,18 +96,20 @@ class RepositorioAvisoEmBDR implements RepositorioAviso {
             $periodos = $stmtPeriodos->fetchAll(PDO::FETCH_COLUMN);
 
             $aviso = new Aviso(
-                $dado['id'],
+                (int)$dado['id'],
                 $dado['titulo'],
                 $dado['texto'],
-                (bool) $dado['urgente'],
-                new \DateTime($dado['validade']),
+                (bool)$dado['urgente'],
+                new DateTime($dado['validade']),
                 $dado['publico_alvo'],
-                $dado['setor_id'],
-                $dado['usuario_id'],
-                $periodos
+                (int)$dado['setor_id'],
+                (int)$dado['usuario_id'],
+                $periodos,
+                $dado['nome_setor'] ?? 'Geral',
+                $dado['cor_hex'] ?? '#6c757d',
+                $dado['nome_autor'] ?? 'Sistema',
+                new DateTime($dado['data_criacao'])
             );
-
-            $aviso->setDadosExibicao($dado['nome_setor'], $dado['cor_hex'], $dado['nome_autor']);
             
             $avisosObjetos[] = $aviso->toArray();
         }
