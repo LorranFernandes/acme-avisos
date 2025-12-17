@@ -4,8 +4,8 @@ USE acme_avisos;
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE, -- Deve terminar em @acme.br
-    senha_hash VARCHAR(255) NOT NULL, -- SHA-512
+    email VARCHAR(255) NOT NULL UNIQUE, 
+    senha_hash VARCHAR(255) NOT NULL, 
     sal VARCHAR(255) NOT NULL, 
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -29,7 +29,7 @@ CREATE TABLE avisos (
     texto TEXT NOT NULL,
     urgente BOOLEAN DEFAULT FALSE,
     validade DATETIME NOT NULL,
-    publico_alvo VARCHAR(100) NOT NULL, -- Ex: Alunos, Todos
+    publico_alvo VARCHAR(100) NOT NULL,
     setor_id INT NOT NULL,
     usuario_id INT NOT NULL,
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,

@@ -1,7 +1,9 @@
 {
 	"devDependencies": {
 		"@playwright/test": "^1.57.0",
+		"@types/bootstrap": "^5.2.10",
 		"@types/node": "^25.0.1",
+		"@types/page": "^1.11.9",
 		"jsdom": "^27.3.0",
 		"vite": "^7.2.7",
 		"vitest": "^4.0.15"
@@ -12,5 +14,9 @@
 		"preview": "vite preview",
 		"test": "vitest run",
 		"test:e2e": "playwright test"
+	},
+	"dependencies": {
+		"bootstrap": "^5.3.8",
+		"page": "^1.11.6"
 	}
 }
