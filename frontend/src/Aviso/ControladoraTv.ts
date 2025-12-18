@@ -37,7 +37,7 @@ export class ControladoraTV {
         this.intervaloBusca = setInterval(async () => {
             await this.atualizarFilaDoServidor();
             this.atualizarView(); 
-        }, 10000);
+        }, 10000);//10s
 
         this.contadorAtual = this.tempoParaTroca;
         this.intervaloRelogio = setInterval(() => {
@@ -52,7 +52,7 @@ export class ControladoraTV {
                 this.atualizarView();
                 this.contadorAtual = this.tempoParaTroca;
             }
-        }, 1000);
+        }, 1000);//1s
     }
 
     private async atualizarFilaDoServidor(): Promise<void> {
@@ -63,16 +63,13 @@ export class ControladoraTV {
                 novosAvisos.some(novo => novo.id === local.id)
             );
 
-            novosAvisos.forEach(novo => {
-                const index = this.filaAvisos.findIndex(local => local.id === novo.id);
-                if (index === -1) {
-                    this.filaAvisos.push(novo);
-                } else {
-                    this.filaAvisos[index] = novo;
-                }
-            });
+            const apenasOsNovos = novosAvisos.filter(novo => 
+                !this.filaAvisos.some(local => local.id === novo.id)
+            );
+
+            this.filaAvisos.push(...apenasOsNovos);
         } catch (error) {
-            console.error("Erro na ControladoraTV", error);
+            console.error("Erro ao atualizar a fila", error);
         }
     }
 
@@ -84,7 +81,6 @@ export class ControladoraTV {
     }
 
     private atualizarView(): void {
-        // Pega os 3 primeiros para exibir
         const visiveis = this.filaAvisos.slice(0, this.itensPorPagina);
         const total = this.filaAvisos.length;
         

@@ -14,12 +14,18 @@ class Aviso implements JsonSerializable {
     private string $publicoAlvo;
     private int $setorId;
     private int $usuarioId;
+    /** 
+     * @var array<string> 
+     * */
     private array $periodos;
     private string $nomeSetor; 
     private string $corSetor;
     private string $nomeAutor;
-    private ?DateTime $dataCriacao;
+    private DateTime $dataCriacao;
 
+    /**
+     * @param array<string> $periodos
+     */
     public function __construct(
         ?int $id, 
         string $titulo, 
@@ -59,8 +65,14 @@ class Aviso implements JsonSerializable {
     public function getPublicoAlvo(): string { return $this->publicoAlvo; }
     public function getSetorId(): int { return $this->setorId; }
     public function getUsuarioId(): int { return $this->usuarioId; }
+    /**
+     * @return array<string>
+     */
     public function getPeriodos(): array { return $this->periodos; }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function jsonSerialize(): array {
         return [
             'id' => $this->id,
@@ -75,10 +87,13 @@ class Aviso implements JsonSerializable {
             'setor_nome' => $this->nomeSetor, 
             'cor_hex' => $this->corSetor,
             'nome_autor' => $this->nomeAutor,
-            'data_criacao' => $this->dataCriacao ? $this->dataCriacao->format('Y-m-d H:i:s') : null
+            'data_criacao' => $this->dataCriacao
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array {
         return $this->jsonSerialize();
     }

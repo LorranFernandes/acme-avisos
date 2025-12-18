@@ -51,7 +51,7 @@ export class Aviso {
             obj.autor_id || obj.usuario_id || obj.usuarioId,
             obj.setor_cor || obj.cor_hex || '#6c757d',
             obj.nome_autor || obj.autor_nome || 'Sistema',
-            obj.data_criacao ? new Date(obj.data_criacao) : new Date()
+            obj.dataCriacao ? new Date(obj.data_criacao) : new Date()
         );
     }
 }

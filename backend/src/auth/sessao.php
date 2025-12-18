@@ -49,6 +49,9 @@ class Sessao
         session_destroy();
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function obterDadosUsuario(): ?array 
     {
         if (!$this->estaLogado()) return null;

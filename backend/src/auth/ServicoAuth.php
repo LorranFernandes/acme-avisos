@@ -13,6 +13,9 @@ class ServicoAuth
     ) {
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function login(string $email, string $senha): ?array
     {
         if (!str_ends_with($email, '@acme.br')) {
@@ -41,6 +44,9 @@ class ServicoAuth
         $this->sessao->logout();
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function obterUsuarioDaSessao(): ?array
     {
         return $this->sessao->obterDadosUsuario();

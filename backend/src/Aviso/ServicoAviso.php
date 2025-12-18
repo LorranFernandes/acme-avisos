@@ -12,6 +12,10 @@ class ServicoAviso {
         $this->repositorio = $repositorio;
     }
 
+    /**
+     * @param array<string, mixed> $dados
+     * @return array<string, mixed>
+     */
     public function criarAviso(array $dados): array {
 
         if (empty($dados['titulo']) || empty($dados['texto'])) {
@@ -54,10 +58,16 @@ class ServicoAviso {
         return $avisoSalvo->toArray();
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function listarAvisos(bool $modoTv = false): array {
         return $this->repositorio->listar($modoTv);
     }
     
+    /**
+     * @return array<string, mixed>
+     */
     public function obterRecursosCadastro(): array {
         return [
             'setores' => $this->repositorio->listarSetores(),
