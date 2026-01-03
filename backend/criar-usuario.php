@@ -12,7 +12,7 @@ $dotenv->safeLoad();
 // Ususario Criado
 $usuario = [
     'nome' => 'Funcionario Teste',
-    'email' => 'test_railway@acme.br',
+    'email' => 'teste@acme.br',
     'senha' => '123456'
 ];
 
