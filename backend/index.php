@@ -1,7 +1,7 @@
 <?php
 
 require_once 'vendor/autoload.php';
-require_once 'src/connection/conexao.php';
+require_once 'src/Connection/conexao.php';
 
 $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
