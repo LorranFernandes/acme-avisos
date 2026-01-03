@@ -5,7 +5,7 @@ function conectarBanco(): PDO {
     try {
         $dbName = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'acme_avisos';
         $dbHost = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
-        $port = $_ENV['DB_PORT'];
+        $port = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?: '3306';
         $dbUser = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'root';
         $dbPass = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?: 'root';
         $dbCharset = $_ENV['DB_CHARSET'] ?? getenv('DB_CHARSET') ?: 'utf8mb4';
