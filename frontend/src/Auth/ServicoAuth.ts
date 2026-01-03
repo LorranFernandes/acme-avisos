@@ -28,7 +28,7 @@ export class ServicoAuth {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", 
+        credentials: "include",
         body: JSON.stringify({ email, senha }),
       });
 
