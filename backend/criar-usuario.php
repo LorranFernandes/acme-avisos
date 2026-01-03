@@ -6,13 +6,13 @@ require_once __DIR__ . '/src/connection/conexao.php';
 use Utils\Criptografia;
 use Dotenv\Dotenv;
 
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->safeLoad();
 
 // Ususario Criado
 $usuario = [
     'nome' => 'Funcionario Teste',
-    'email' => 'teste@acme.br',
+    'email' => 'test_railway@acme.br',
     'senha' => '123456'
 ];
 
