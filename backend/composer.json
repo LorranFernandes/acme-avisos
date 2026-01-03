@@ -2,7 +2,9 @@
     "name": "avisos/backend",
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "": "src/",
+            "Auth\\": "src/Auth/",  
+            "Connection\\": "src/Connection/"
         }
     },
     "authors": [
