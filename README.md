@@ -2,6 +2,12 @@
 
 - **Lorran Fernandes da Cunha Parreira**
 
+### Login
+
+- Login - teste@acme.br
+- Senha - 123456
+
+
 ### Pré-requisitos
 
 - [PHP 8.0+](https://www.php.net/)
